@@ -90,6 +90,9 @@ class ProfilePage extends Component {
         this.updatePersonalDetails = this.updatePersonalDetails.bind(this);
         this.validateInputs = this.validateInputs.bind(this);
         this.updateAvatar = this.updateAvatar.bind(this);
+
+        this.pronounsPicker = React.createRef();
+        this.timezonePicker = React.createRef();
     }
 
     componentDidUpdate(prevProps) {
@@ -265,6 +268,7 @@ class ProfilePage extends Component {
                                     value: '',
                                     label: this.props.translate('profilePage.selectYourPronouns'),
                                 }}
+                                ref={ref => this.pronounsPicker = ref}
                                 value={pronounsPickerValue}
                             />
                             {this.state.hasSelfSelectedPronouns && (
@@ -295,6 +299,7 @@ class ProfilePage extends Component {
                                 items={timezones}
                                 isDisabled={this.state.isAutomaticTimezone}
                                 value={this.state.selectedTimezone}
+                                ref={ref => this.timezonePicker = ref}
                             />
                         </View>
                         <CheckboxWithLabel
@@ -310,7 +315,7 @@ class ProfilePage extends Component {
                             onPress={this.updatePersonalDetails}
                             style={[styles.w100]}
                             text={this.props.translate('common.save')}
-                            pressOnEnter
+                            pressOnEnter={![this.pronounsPicker, this.timezonePicker].includes(document.activeElement)}
                         />
                     </FixedFooter>
                 </KeyboardAvoidingView>

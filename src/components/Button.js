@@ -148,6 +148,28 @@ class Button extends Component {
             return;
         }
 
+        this.initializeKeyboardShortcut();
+    }
+
+    componentDidUpdate() {
+        if (this.props.pressOnEnter) {
+            // If pressOnEnter is enabled, we need to re-initialize the keyboard shortcut
+            this.initializeKeyboardShortcut();
+        } else {
+            // If pressOnEnter is disabled, we need to remove the keyboard shortcut
+            this.unsubscribe();
+        }
+    }
+
+    componentWillUnmount() {
+        // Cleanup event listeners
+        if (!this.unsubscribe) {
+            return;
+        }
+        this.unsubscribe();
+    }
+
+    initializeKeyboardShortcut() {
         const shortcutConfig = CONST.KEYBOARD_SHORTCUTS.ENTER;
 
         // Setup and attach keypress handler for pressing the button with Enter key
@@ -157,14 +179,6 @@ class Button extends Component {
             }
             this.props.onPress();
         }, shortcutConfig.descriptionKey, shortcutConfig.modifiers, true, false, this.props.enterKeyEventListenerPriority, false);
-    }
-
-    componentWillUnmount() {
-        // Cleanup event listeners
-        if (!this.unsubscribe) {
-            return;
-        }
-        this.unsubscribe();
     }
 
     renderContent() {
